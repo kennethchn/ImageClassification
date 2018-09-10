@@ -1,0 +1,45 @@
+syntax = "proto2";
+package image_feature;
+
+message KeyPoint{
+    optional float angle = 1;
+    optional int32 class_id = 2;
+    optional int32 octave = 3;
+    message point{
+        optional float x = 1;
+        optional float y = 2;
+    }
+    optional point pt = 6;
+    optional float response = 4;
+    optional float size = 5;
+}
+
+message Descriptors{
+    message shape{
+        repeated int32 elem = 1;
+    }
+    optional shape dim = 1;
+    repeated float element = 2 [packed=true];
+}
+
+message OneFeature{
+    optional string name = 1;
+    repeated KeyPoint kps = 2;
+    optional Descriptors des = 3;
+}
+
+message Feature{
+    optional string name = 1;
+    repeated OneFeature feature = 2;
+}
+
+//存储dict格式数据
+message StringDict{
+    optional string key = 1;
+    optional string value = 2;
+}
+
+//可以记录原图像路径，特征路径和索引路径
+message PathDict{
+    repeated StringDict path_dict = 1;
+}

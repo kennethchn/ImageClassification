@@ -1,0 +1,146 @@
+#-*- coding:utf-8 -*-
+from __future__ import print_function
+
+import os
+import cv2
+import numpy as np
+import image_feature_pb2
+
+
+def save_feature(image_name, img_kp, img_des, save_path):
+    
+    one_feature = image_feature_pb2.OneFeature()
+    
+    one_feature.name = image_name  #保存特征对应的图像名称
+    
+    #保存keypoint信息
+    for kp in img_kp:
+        one_kp = one_feature.kps.add()
+
+        one_kp.angle = kp.angle
+        one_kp.class_id = kp.class_id
+        one_kp.octave = kp.octave
+        one_kp.pt.x = kp.pt[0]
+        one_kp.pt.y = kp.pt[1]
+        one_kp.response = kp.response
+        one_kp.size = kp.size
+    
+    des_shape = np.array( img_des ).shape
+    for ds in des_shape:
+        one_feature.des.dim.elem.append(ds)
+
+    for x in img_des:
+        for y in x:
+            one_feature.des.element.append(y)
+    
+    data = one_feature.SerializeToString()
+    
+    if os.path.exists(save_path):
+        print('errormessage:',save_path,'is already exisits, please change the save path!')
+        return -1
+    with open(save_path, 'w') as f:
+        f.write(data)
+
+def read_feature(data_path):
+    with open(data_path, 'r') as f:
+        data = f.read()
+
+    one_feature = image_feature_pb2.OneFeature()
+    one_feature.ParseFromString(data)
+    
+    img_name = one_feature.name
+#    print( img_name )
+
+    img_kp = []
+    for one_atr in one_feature.kps:
+        kp = cv2.KeyPoint()
+        kp.angle = one_atr.angle
+        kp.class_id = one_atr.class_id
+        kp.octave = one_atr.octave
+        kp.pt = (one_atr.pt.x, one_atr.pt.y)
+        kp.response = one_atr.response
+        kp.size = one_atr.size
+        img_kp.append(kp)
+#    print( img_kp )
+
+    des_shape =  tuple( one_feature.des.dim.elem) 
+#    print(des_shape)
+    des_data = one_feature.des.element
+    img_des = np.array(des_data).reshape(des_shape)
+#    print( img_des )
+    return img_name, img_kp, img_des
+
+#    return img_kp, img_des
+
+    # kp = image_feature_pb2.KeyPoint()
+    # kp.angle = 1.0
+    # kp.class_id = 1
+    # kp.octave = 3
+
+    # kp.pt.x = 1.0
+    # kp.pt.y = 2.0
+
+    # kp.response = 3.0
+    # kp.size = 5.0
+
+
+    # a = [[1,2,3],[3,4,5], [4,5,6]]
+
+    # des = image_feature_pb2.Descriptors()
+
+    # aa = des.array.add()
+    # b = a[1][1]
+    # aa.element.append(b)
+    # aa.element.append(b)
+
+    # print( aa.element)
+
+def save_dict( kv_dict, save_dict_path ):
+
+    path_dict = image_feature_pb2.PathDict()
+    for k in kv_dict.keys():
+        one_path = path_dict.path_dict.add()
+        one_path.key = k
+        one_path.value = kv_dict[k]
+    
+    data = path_dict.SerializeToString()
+    if os.path.exists( save_dict_path ):
+        print('ErrorMessage:', save_dict_path, ' is already exisit!')
+        return -1
+    with open(save_dict_path, 'a') as f:
+        f.write(data)
+
+def read_dict( dict_path ):
+    if not os.path.exists( dict_path ):
+        print('ErrorMessage:', dict_path, ' is not exisit!')
+        return -1
+    with open( dict_path, 'r') as f:
+        data = f.read()
+    
+    data_proto = image_feature_pb2.PathDict()
+    data_proto.ParseFromString(data)
+
+    pdict = {}
+    for one_elem in data_proto.path_dict:
+        pdict[one_elem.key] = one_elem.value
+    return pdict
+
+if __name__ == '__main__':
+#    kp_aa = cv2.KeyPoint()
+#    kps_d = [kp_aa,kp_aa]
+#    des_a = np.array( [[1,2,3], [2,3,4], [5,6,7]])
+#    save_feature( 'image1.jpg', kps_d, des_a, 'data.txt' ) 
+#    img_name, img_kp, img_des = read_feature('data.txt')
+
+#    print( img_name )
+#    print( img_kp, type( img_kp ))
+#    print( img_des, type( img_des ))
+
+  pdict = dict()
+  pdict['a'] = 'b'
+  pdict['c'] = 'd'
+
+  save_dict_path = 'image.path'
+  save_dict( pdict, save_dict_path )
+  dd = read_dict( save_dict_path )
+  print( dd )
