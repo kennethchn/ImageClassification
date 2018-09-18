@@ -112,8 +112,9 @@ if __name__ == '__main__':
 #		print( name_list[mr[0].trainIdx])
 	
 #test4
-	image_path = '/root/caffework/TestLabelImage'
+#	image_path = '/root/caffework/TestLabelImage'
 #	image_path = './image'
+	image_path = '../ceshi0109'
 	search_feature = extract_feature( image_path )
 	name_list, feature_train = load_feature()
 	
@@ -124,7 +125,7 @@ if __name__ == '__main__':
 	for key in search_feature.keys():
 		afeature = search_feature[key]
 		afeature = afeature[np.newaxis, :]
-		print( afeature )
+#		print( afeature )
 		match_result = search_demo( afeature, feature_train )
 
 		temp_record = []
@@ -132,7 +133,7 @@ if __name__ == '__main__':
 		for mr in  match_result[0] :
 			temp_record.append( name_list[mr.trainIdx] )
 		record_result.append( copy.deepcopy(temp_record) )	
-	print( record_result )
+#	print( record_result )
 	np.save( '../record.npy', record_result )
 
 

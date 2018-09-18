@@ -15,7 +15,7 @@ a = np.load('../record.npy')
 
 right_num = 0
 for i, x in enumerate(a):
-	temp = [y for y in x[0:400] if y in train_img_name_list]
+	temp = [y for y in x[0:800] if y in train_img_name_list]
 #	print( i, temp )	
 	if temp:
 		right_num += 1

@@ -2,7 +2,8 @@
 from __future__ import print_function
 
 import os
-from image_feature import rw_feature
+#from image_feature import rw_feature
+from RWoperation import rwOperation as rw_feature 
 
 #遍历文件夹   
 def get_path_dict(imageDir):
