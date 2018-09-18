@@ -71,7 +71,7 @@ def extract_feature( image_path):
 	return features_dict 
 
 def load_feature():
-	fd = rwOperation.read_dict_des( 'image_cnn_dict.feature')
+	fd = rwOperation.read_dict_des( '../image_cnn_dict.feature')
 	feature_list = []
 	for key in fd.keys():
 		feature_list.append( fd[key] )
@@ -133,6 +133,6 @@ if __name__ == '__main__':
 			temp_record.append( name_list[mr.trainIdx] )
 		record_result.append( copy.deepcopy(temp_record) )	
 	print( record_result )
-	np.save( 'record.npy', record_result )
+	np.save( '../record.npy', record_result )
 
 

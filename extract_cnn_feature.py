@@ -58,12 +58,12 @@ def extract_feature(net, image_path):
 	return features_dict 
 
 if __name__ == '__main__':
-	image_path = './test_resnet_feature'
+	image_path = '../test_resnet_feature'
 #	image_path = './TestLabelImage'
 	net = load_net()
  	feature_dict = extract_feature(net, image_path )	
 #	print( feature_dict )
-	rwOperation.save_dict_des( feature_dict, 'image_cnn_dict.feature')
+	rwOperation.save_dict_des( feature_dict, '../image_cnn_dict.feature')
 #	fd = rwOperation.read_dict_des( 'dict.feature')
 #	print( fd.keys() )
 #	for key in fd.keys():

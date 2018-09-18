@@ -4,14 +4,14 @@ from RWoperation import readwriteOperation_pb2 as rwOperation
 
 train_img_name_list = os.listdir('/root/caffework/CompanyStandardLabel')
 def load_feature():
-        fd = rwOperation.read_dict_des( 'image_cnn_dict.feature')
+        fd = rwOperation.read_dict_des( '../image_cnn_dict.feature')
         feature_list = []
         for key in fd.keys():
                 feature_list.append( fd[key] )
         feature_train = np.array( feature_list, dtype=np.float32 )
         return fd.keys(), feature_train
 
-a = np.load('record.npy')
+a = np.load('../record.npy')
 
 right_num = 0
 for i, x in enumerate(a):
