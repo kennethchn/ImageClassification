@@ -4,12 +4,40 @@ from __future__ import print_function
 import os
 import cv2
 import numpy as np
-import image_feature_pb2
+import readwriteOperation_pb2 as rwo_pb2
 
+def save_dict_des(des_dict, save_path):
+    if not des_dict:
+        print( 'the input is empty')
+        return -1
+    feature_des = rwo_pb2.Feature()
+    feature_des.name = 'all image feature'
 
+    for key in des_dict.keys():
+        one_des = feature_des.feature.add()
+        one_des.name = key
+        for i in des_dict[key]:
+            one_des.des.element.append(i)		
+    data = feature_des.SerializeToString()
+    with open( save_path, 'w') as f:
+        f.write(data)
+
+def read_dict_des(save_path):
+    with open( save_path, 'r') as f:
+    	data = f.read()
+    feature_des = rwo_pb2.Feature()
+    feature_des.ParseFromString(data)
+    print( feature_des.name )
+    
+    feature_dict = {}
+    desa = feature_des.feature
+    for dd in desa:
+        feature_dict[dd.name] = [i for i in dd.des.element]
+    return feature_dict
+        
 def save_feature(image_name, img_kp, img_des, save_path):
     
-    one_feature = image_feature_pb2.OneFeature()
+    one_feature = rwo_pb2.OneFeature()
     
     one_feature.name = image_name  #保存特征对应的图像名称
     
@@ -45,7 +73,7 @@ def read_feature(data_path):
     with open(data_path, 'r') as f:
         data = f.read()
 
-    one_feature = image_feature_pb2.OneFeature()
+    one_feature = rwo_pb2.OneFeature()
     one_feature.ParseFromString(data)
     
     img_name = one_feature.name
@@ -97,7 +125,7 @@ def read_feature(data_path):
 
 def save_dict( kv_dict, save_dict_path ):
 
-    path_dict = image_feature_pb2.PathDict()
+    path_dict = rwo_pb2.PathDict()
     for k in kv_dict.keys():
         one_path = path_dict.path_dict.add()
         one_path.key = k
@@ -117,7 +145,7 @@ def read_dict( dict_path ):
     with open( dict_path, 'r') as f:
         data = f.read()
     
-    data_proto = image_feature_pb2.PathDict()
+    data_proto = rwo_pb2.PathDict()
     data_proto.ParseFromString(data)
 
     pdict = {}
@@ -126,21 +154,41 @@ def read_dict( dict_path ):
     return pdict
 
 if __name__ == '__main__':
-#    kp_aa = cv2.KeyPoint()
-#    kps_d = [kp_aa,kp_aa]
-#    des_a = np.array( [[1,2,3], [2,3,4], [5,6,7]])
-#    save_feature( 'image1.jpg', kps_d, des_a, 'data.txt' ) 
-#    img_name, img_kp, img_des = read_feature('data.txt')
+    kp_aa = cv2.KeyPoint()
+    kps_d = [kp_aa,kp_aa]
+    des_a = np.array( [[1,2,3], [2,3,4], [5,6,7]])
+    save_feature( 'image1.jpg', kps_d, des_a, 'data.txt' ) 
+    img_name, img_kp, img_des = read_feature('data.txt')
 
-#    print( img_name )
-#    print( img_kp, type( img_kp ))
-#    print( img_des, type( img_des ))
+    print( img_name )
+    print( img_kp, type( img_kp ))
+    print( img_des, type( img_des ))
 
-  pdict = dict()
-  pdict['a'] = 'b'
-  pdict['c'] = 'd'
 
-  save_dict_path = 'image.path'
-  save_dict( pdict, save_dict_path )
-  dd = read_dict( save_dict_path )
-  print( dd )
+#  pdict = dict()
+#  pdict['a'] = 'b'
+#  pdict['c'] = 'd'
+#
+#  save_dict_path = 'image.path'
+#  save_dict( pdict, save_dict_path )
+#  dd = read_dict( save_dict_path )
+#  print( dd )
+
+
+
+
+
+#test3
+#    dicte = {}
+#    dicte['123'] = [1,2,3,4]
+#    dicte['345'] = [12,3,4,56,7,9]
+    
+#    save_dict_des(dicte, 'feature.cnn_feature')
+#    a = read_dict_des('feature.cnn_feature')
+#    for key in a.keys():
+#        print(key)
+#        print( type( a[key]))
+#	print( a[key] )
+
+
+

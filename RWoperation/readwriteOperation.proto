@@ -1,5 +1,5 @@
 syntax = "proto2";
-package image_feature;
+package RWoperation;
 
 message KeyPoint{
     optional float angle = 1;
@@ -33,13 +33,11 @@ message Feature{
     repeated OneFeature feature = 2;
 }
 
-//存储dict格式数据
 message StringDict{
     optional string key = 1;
     optional string value = 2;
 }
 
-//可以记录原图像路径，特征路径和索引路径
 message PathDict{
     repeated StringDict path_dict = 1;
 }
