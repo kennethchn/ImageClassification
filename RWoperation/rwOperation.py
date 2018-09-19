@@ -7,6 +7,9 @@ import numpy as np
 import readwriteOperation_pb2 as rwo_pb2
 
 def save_dict_des(des_dict, save_path):
+    #save only descriptor, without keypoint
+    #des_dict: {image_name:decriptor}
+    #save_path: the proto binary file path
     if not des_dict:
         print( 'the input is empty')
         return -1
@@ -23,11 +26,13 @@ def save_dict_des(des_dict, save_path):
         f.write(data)
 
 def read_dict_des(save_path):
+    #read only descriptor from proto binary file 
+    #save_path: the proto binary file path
     with open( save_path, 'r') as f:
     	data = f.read()
     feature_des = rwo_pb2.Feature()
     feature_des.ParseFromString(data)
-    print( feature_des.name )
+#    print( feature_des.name )
     
     feature_dict = {}
     desa = feature_des.feature
@@ -36,7 +41,12 @@ def read_dict_des(save_path):
     return feature_dict
         
 def save_feature(image_name, img_kp, img_des, save_path):
-     
+     #save surf/sift feature to prototxt file
+     #image_name: the image name 
+     #img_kp: the KeyPoint list
+     #img_des: the descriptors
+     #save_path: the save path
+
     one_feature = rwo_pb2.OneFeature()
     
     one_feature.name = image_name  #保存特征对应的图像名称
@@ -70,6 +80,12 @@ def save_feature(image_name, img_kp, img_des, save_path):
         f.write(data)
 
 def read_feature(data_path):
+    #descriptor: read feature from prototxt file 
+    #data_path: the prototxt file path
+
+    if not os.path.exists(data_path):
+        print('errormessage:',data_path,'is not exisits!')
+        return -1
     with open(data_path, 'r') as f:
         data = f.read()
 
@@ -124,6 +140,9 @@ def read_feature(data_path):
     # print( aa.element)
 
 def save_dict( kv_dict, save_dict_path ):
+    # save the path dict, the key is image name, the value is the image/feature path
+    #kv_dict: key-value dict, look like {'imag':'osdfjskldfnklvjdaf'}
+    #save_dict_path: save path for prototxt file 
 
     path_dict = rwo_pb2.PathDict()
     for k in kv_dict.keys():
@@ -139,6 +158,10 @@ def save_dict( kv_dict, save_dict_path ):
         f.write(data)
 
 def read_dict( dict_path ):
+    # read the key-value dict, wich save by save_dict function 
+    #dict_path: the prototxt file path
+    # get the key-value
+
     if not os.path.exists( dict_path ):
         print('ErrorMessage:', dict_path, ' is not exisit!')
         return -1

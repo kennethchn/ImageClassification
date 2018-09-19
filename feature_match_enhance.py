@@ -6,7 +6,7 @@ import time
 import numpy as np
 import shutil
 
-from image_feature import rw_feature
+from RWoperation import rwOperation as rw_feature
 
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
