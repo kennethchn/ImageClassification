@@ -36,7 +36,7 @@ def read_dict_des(save_path):
     return feature_dict
         
 def save_feature(image_name, img_kp, img_des, save_path):
-    
+     
     one_feature = rwo_pb2.OneFeature()
     
     one_feature.name = image_name  #保存特征对应的图像名称
@@ -132,9 +132,9 @@ def save_dict( kv_dict, save_dict_path ):
         one_path.value = kv_dict[k]
     
     data = path_dict.SerializeToString()
-    if os.path.exists( save_dict_path ):
-        print('ErrorMessage:', save_dict_path, ' is already exisit!')
-        return -1
+#    if os.path.exists( save_dict_path ):
+#        print('ErrorMessage:', save_dict_path, ' is already exisit!')
+#        return -1
     with open(save_dict_path, 'a') as f:
         f.write(data)
 

@@ -46,26 +46,26 @@ def save_feature( proto_path, save_root_path ):
     surf_detector = create_detector()
 
     image_feature_path_dict = dict()
-    for img_path_key in image_path_dict.keys():
-        img_path = image_path_dict[img_path_key]
-        img = cv2.imread( img_path ) 
-        img = cv2.resize(img, (360,360))
-
+    image_feature_path_file = os.path.join( save_root_path, 'src_image_feature_path.path')
+    for k, img_path_key in enumerate(image_path_dict.keys()):
+        try:
+            img_path = image_path_dict[img_path_key]
+            img = cv2.imread( img_path ) 
+            img = cv2.resize(img, (360,360))
+        except:
+            print('wrong read!')
+            continue
         kp, des = detect( surf_detector, img)
-
+        if not kp:
+            continue
         _, tmpfilename = os.path.split(img_path)
         filename, _ = os.path.splitext( tmpfilename )
 
         one_image_feature_path = os.path.join( image_feature_folder, filename + '.surf')
         rw_feature.save_feature( tmpfilename, kp, des, one_image_feature_path )
         image_feature_path_dict[img_path_key] =  one_image_feature_path
-    
-    image_feature_path_file = os.path.join( save_root_path, 'src_image_feature_path.path')
-    if os.path.exists( image_feature_path_file):
-        print('ErrorMessage:', image_feature_path_file, ' is exisit! ')
-        return -1
-    else:
-        rw_feature.save_dict(image_feature_path_dict, image_feature_path_file)
+        if (not k%1000 ) or k == len( image_path_dict.keys() )-1:
+            rw_feature.save_dict(image_feature_path_dict, image_feature_path_file)
 
 
 if __name__ == "__main__":

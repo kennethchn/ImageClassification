@@ -5,6 +5,7 @@ import os
 import sys
 import copy
 sys.path.append('/root/caffe/python')
+sys.path.append('/home/kenneth/ckwork/caffe-master/python')
 import time
 import cv2
 import caffe
@@ -16,8 +17,8 @@ caffe.set_mode_gpu()
 caffe.set_device(0)
 
 def load_net():
-	weight = '/root/caffework/datafolder/resnet/ResNet-152-model.caffemodel'
-	deploy_file = '/root/caffework/datafolder/resnet/ResNet_152_deploy.prototxt'
+	weight = '../datafolder/resnet/ResNet-152-model.caffemodel'
+	deploy_file = '../datafolder/resnet/ResNet_152_deploy.prototxt'
 
 	net = caffe.Net( deploy_file, weight, caffe.TEST )
 	return net

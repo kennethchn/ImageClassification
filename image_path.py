@@ -40,7 +40,8 @@ def read_image_path( protofile_path ):
     return image_path_dict
 
 if __name__ == '__main__':
-    imageDir = '../datafolder/TestLabelImage'
+    imageDir = '../datafolder/CompanyStandardLabel'
+    imageDir = '/home/kenneth/ckwork/image_search/LabelImage/allImage1229'
 #    print( get_path_dict(rootDir))
     save_path = '../datafolder/test/src_image_path.path'
     save_image_path( imageDir, save_path)
