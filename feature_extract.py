@@ -70,8 +70,8 @@ def save_feature( proto_path, save_root_path ):
 
 if __name__ == "__main__":
 
-    proto_path = './wine_images/src_image_path.path'
-    save_root_path = '/home/kenneth/ckwork/image_search/wine_images'
+    proto_path = '../datafolder/test/src_image_path.path'
+    save_root_path = '../datafolder/test'
     save_feature( proto_path, save_root_path )
      
 

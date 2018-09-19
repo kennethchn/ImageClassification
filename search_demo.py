@@ -37,7 +37,7 @@ img = cv2.resize(img, (360,360))
 kp, des = feature_extract.detect( surf, image)
 
 from RWoperation import rwOperation 
-image_feature_path = ''
+image_feature_path = '../datafolder/test/src_image_feature_path.path'
 feature_path_dict = rwOperation.read_dict( image_feature_path )
 
 f_train_path = []
