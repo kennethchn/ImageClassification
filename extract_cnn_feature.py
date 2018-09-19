@@ -5,20 +5,19 @@ import os
 import sys
 import copy
 sys.path.append('/root/caffe/python')
-sys.path.append('/root/caffework/RWoperation')
 import time
 import cv2
 import caffe
 import numpy as np
 
-import rwOperation 
+from RWoperation import rwOperation 
 
 caffe.set_mode_gpu()
 caffe.set_device(0)
 
 def load_net():
-	weight = '/root/caffework/resnet/ResNet-152-model.caffemodel'
-	deploy_file = '/root/caffework/resnet/ResNet_152_deploy.prototxt'
+	weight = '/root/caffework/datafolder/resnet/ResNet-152-model.caffemodel'
+	deploy_file = '/root/caffework/datafolder/resnet/ResNet_152_deploy.prototxt'
 
 	net = caffe.Net( deploy_file, weight, caffe.TEST )
 	return net
@@ -58,12 +57,12 @@ def extract_feature(net, image_path):
 	return features_dict 
 
 if __name__ == '__main__':
-	image_path = '../test_resnet_feature'
+	image_path = '../datafolder/test_resnet_feature'
 #	image_path = './TestLabelImage'
 	net = load_net()
  	feature_dict = extract_feature(net, image_path )	
 #	print( feature_dict )
-	rwOperation.save_dict_des( feature_dict, '../image_cnn_dict.feature')
+	rwOperation.save_dict_des( feature_dict, '../datafolder/image_cnn_dict.feature')
 #	fd = rwOperation.read_dict_des( 'dict.feature')
 #	print( fd.keys() )
 #	for key in fd.keys():

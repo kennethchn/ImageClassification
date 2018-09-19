@@ -5,25 +5,23 @@ import os
 import sys
 import copy
 sys.path.append('/root/caffe/python')
-sys.path.append('/root/caffework/RWoperation')
 import time
 import cv2
 import caffe
 import numpy as np
 
-import rwOperation 
+from RWoperation import rwOperation 
 
 caffe.set_mode_gpu()
 caffe.set_device(0)
 
 def load_net():
-	weight = '/root/caffework/resnet/ResNet-152-model.caffemodel'
-	deploy_file = '/root/caffework/resnet/ResNet_152_deploy.prototxt'
+	weight = '/root/caffework/datafolder/resnet/ResNet-152-model.caffemodel'
+	deploy_file = '/root/caffework/datafolder/resnet/ResNet_152_deploy.prototxt'
 
 	net = caffe.Net( deploy_file, weight, caffe.TEST )
 	return net
-def one_extract_feature(image_path):
-	net = load_net()
+def one_extract_feature(net, image_path):
 	transformer = caffe.io.Transformer({'data':net.blobs['data'].data.shape})
 	transformer.set_transpose('data', (2,0,1))
 	transformer.set_raw_scale('data', 255)
@@ -32,11 +30,12 @@ def one_extract_feature(image_path):
 	net.blobs['data'].reshape(1,3,224,224)
 	
 	try:
-		image = caffe.io.load_image( image_path )
+		simage = caffe.io.load_image( image_path )
 	except:
 		print('read image error, error path:', image_path)
+		return -1
 
-	transformered_image = transformer.preprocess( 'data', image )
+	transformered_image = transformer.preprocess( 'data', simage )
 	net.blobs['data'].data[...] = transformered_image 
 	st0 = time.time()
 	net.forward()
@@ -66,12 +65,12 @@ def extract_feature( image_path):
 		net.blobs['data'].data[...] = transformered_image 
 		st0 = time.time()
 		net.forward()
-		print( time.time() - st0 )
+		print('extract_feature time:', time.time() - st0 )
 		features_dict[img] = copy.deepcopy( np.squeeze( net.blobs['pool5'].data))
 	return features_dict 
 
 def load_feature():
-	fd = rwOperation.read_dict_des( '../image_cnn_dict.feature')
+	fd = rwOperation.read_dict_des( '../datafolder/image_cnn_dict.feature')
 	feature_list = []
 	for key in fd.keys():
 		feature_list.append( fd[key] )
@@ -79,9 +78,10 @@ def load_feature():
 	return fd.keys(), feature_train
 
 def search_demo(feature, feature_train):
+	st_time = time.time()
 	sf = cv2.BFMatcher()
 	res = sf.knnMatch( feature, feature_train, k = 1000 )
-	print( res )
+	print( 'search time:', time.time() - st_time )
 	return res 
 if __name__ == '__main__':
 #test1
@@ -114,7 +114,7 @@ if __name__ == '__main__':
 #test4
 #	image_path = '/root/caffework/TestLabelImage'
 #	image_path = './image'
-	image_path = '../ceshi0109'
+	image_path = '../datafolder/ceshi0109'
 	search_feature = extract_feature( image_path )
 	name_list, feature_train = load_feature()
 	
@@ -134,6 +134,6 @@ if __name__ == '__main__':
 			temp_record.append( name_list[mr.trainIdx] )
 		record_result.append( copy.deepcopy(temp_record) )	
 #	print( record_result )
-	np.save( '../record.npy', record_result )
+	np.save( '../datafolder/record.npy', record_result )
 
 

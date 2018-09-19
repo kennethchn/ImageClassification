@@ -10,7 +10,7 @@ import feature_extract
 
 import feature_match
 
-imageDir = '/home/kenneth/ckwork/image_search/image_add'
+imageDir = '../datafolder/image_add'
 save_root_path = './image_add_floder'
 if not os.path.exists(save_root_path):
     os.mkdir(save_root_path)
