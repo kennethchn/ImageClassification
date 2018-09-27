@@ -74,8 +74,7 @@ def save_feature(image_name, img_kp, img_des, save_path):
     data = one_feature.SerializeToString()
     
     if os.path.exists(save_path):
-        print('errormessage:',save_path,'is already exisits, please change the save path!')
-        return -1
+        print('warnning:',save_path,'is already exisits, please change the save path!')
     with open(save_path, 'w') as f:
         f.write(data)
 
@@ -84,7 +83,7 @@ def read_feature(data_path):
     #data_path: the prototxt file path
 
     if not os.path.exists(data_path):
-        print('errormessage:',data_path,'is not exisits!')
+        print('warning:',data_path,'is not exisits!')
         return -1
     with open(data_path, 'r') as f:
         data = f.read()
@@ -154,7 +153,7 @@ def save_dict( kv_dict, save_dict_path ):
 #    if os.path.exists( save_dict_path ):
 #        print('ErrorMessage:', save_dict_path, ' is already exisit!')
 #        return -1
-    with open(save_dict_path, 'a') as f:
+    with open(save_dict_path, 'w') as f:
         f.write(data)
 
 def read_dict( dict_path ):

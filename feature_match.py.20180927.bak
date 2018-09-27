@@ -16,7 +16,7 @@ import tensorflow as tf
 config = ConfigParser.ConfigParser()
 config.read('config.ini')
 
-
+break_from_flag = int( config.get('MetaData', 'break_from_flag'))
 #是否从断点开始
 test_flag = True
 
@@ -215,18 +215,17 @@ def class_image_slow( imageDir ):
     
 #   获取索引特征字典，如果存在读取，如果不存在创建一个dict，用于后面存储特征索引，
     iif_save_path = os.path.join( imageDir, 'index_image_feature.path' )
-
-    index_image_feature_path_dict = dict()
+    if os.path.exists(iif_save_path):
+        index_image_feature_path_dict = rw_feature.read_dict(iif_save_path)
+    else:
+        index_image_feature_path_dict = dict()
     
     #从特征文件夹中获取所以的kp和des数据，并以字典方式保存，key是图像名称
 #    kp_dict, des_dict = read_des_feature(feature_path_dict)
 
     key_list = list()
     key_list_path = config.get('MetaData', 'key_list_path')
-    
-    break_from_flag = int( config.get('MetaData', 'break_from_flag'))
-    if break_from_flag: 
-        index_image_feature_path_dict = rw_feature.read_dict(iif_save_path)
+    if break_from_flag:
         with open(key_list_path, 'r') as f:
             temp_key = f.readline().strip()
             while temp_key:
